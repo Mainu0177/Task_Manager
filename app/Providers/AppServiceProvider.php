@@ -2,10 +2,16 @@
 
 namespace App\Providers;
 
-use Illuminate\Support\ServiceProvider;
+use App\Models\Task;
+use App\Policies\TaskPolicy;
+// use Illuminate\Support\ServiceProvider;
+use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider; // laravel er service provider ta vebohar kora lagbe
 
 class AppServiceProvider extends ServiceProvider
 {
+    protected $policies = [
+        Task::class => TaskPolicy::class
+    ];
     /**
      * Register any application services.
      */
@@ -19,6 +25,6 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        //
+        $this->registerPolicies();
     }
 }

@@ -40,7 +40,16 @@ class AuthController extends Controller
 
             return $this->success($data, 'User Logged In Successfully');
         } catch (\Exception $exception) {
-            Log::error('RegisterRequest Error : ' .$exception->getMessage());
+            Log::error('Login Error : ' .$exception->getMessage());
+        }
+    }
+
+    public function logout(Request $request){
+        try {
+            $user = $request->user()->tokens()->delete();
+            return $this->success(null, 'Logout Successfully');
+        } catch (\Exception $exception) {
+            Log::error('Logout Error : ' .$exception->getMessage());
         }
     }
 }

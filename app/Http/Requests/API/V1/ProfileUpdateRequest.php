@@ -2,9 +2,10 @@
 
 namespace App\Http\Requests\API\V1;
 
+use Illuminate\Validation\Rule;
 use Illuminate\Foundation\Http\FormRequest;
 
-class ProfileUpdate extends ApiFormRequest
+class ProfileUpdateRequest extends ApiFormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -23,7 +24,14 @@ class ProfileUpdate extends ApiFormRequest
     {
         return [
             'name' => 'sometimes|required|string|max:255',
-            'email' => 'sometimes|required|string|email|max:255|unique:users,email,' . $this->user()->id,
+            'email' => [
+                'sometimes',
+                'required',
+                'string',
+                'email',
+                'max:255',
+                Rule::unique('users', 'email')->ignore($this->user()->id)
+            ],
             'password' => 'sometimes|required|string|min:8|confirmed',
         ];
     }
