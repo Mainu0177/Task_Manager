@@ -9,12 +9,24 @@ class Task extends Model
 {
     use SoftDeletes;
 
+    public const STATUSES = [
+        'created',
+        'assigned',
+        'progress',
+        'hold',
+        'completed',
+        'cancelled'
+    ];
     protected $fillable = [
         'created_by',
-        'assigned_to',
         'title',
         'description',
         'status',
+    ];
+    protected $dates = [
+        'created_at',
+        'updated_at',
+        'deleted_at',
     ];
 
     // define relationships if needed
@@ -22,7 +34,4 @@ class Task extends Model
         return $this->belongsTo(User::class, 'created_by');
     }
 
-    public function assignedTo(){
-        return $this->belongsTo(User::class, 'assigned_to');
-    }
 }

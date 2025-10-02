@@ -3,6 +3,7 @@
 use App\Http\Controllers\API\V1\Auth\AuthController;
 use App\Http\Controllers\API\V1\Auth\ForgetPasswordController;
 use App\Http\Controllers\API\V1\UserController;
+use App\Http\Controllers\TaskController;
 use Illuminate\Support\Facades\Route;
 
 Route::group(['prefix' => 'V1'], function () {
@@ -21,7 +22,12 @@ Route::group(['prefix' => 'V1'], function () {
             Route::put('/user', [UserController::class, 'update']);
             Route::post('/logout', [AuthController::class, 'logout']);
         });
+
+        Route::group(['middleware' => 'auth:sanctum'], function () {
+                Route::apiResource('tasks', TaskController::class);
+            });
     });
+
 });
 
 
