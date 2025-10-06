@@ -14,7 +14,7 @@ class UserController extends Controller
         try {
             return $this->success(new UserResource($request->user()), 'User Profile Retrieved Successfully');
         } catch (\Exception $exception) {
-            Log::error('RegisterRequest Error : ' .$exception->getMessage());
+            Log::error('Profile Error : ' .$exception->getMessage());
             return $this->error(['Something went wrong'], 500);
         }
     }
@@ -23,9 +23,11 @@ class UserController extends Controller
         try {
             $user = $request->user();
             $user->update($request->validated());
+            // return $request->validated();
+            $user->update($request->validated());
             return $this->success(new UserResource($user), 'Profile Updated Successfully');
         } catch (\Exception $exception) {
-            Log::error('RegisterRequest Error : ' .$exception->getMessage());
+            Log::error('Profile update Error : ' .$exception->getMessage());
             return $this->error(['Something went wrong'], 500);
         }
     }

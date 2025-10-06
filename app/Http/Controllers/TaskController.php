@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\API\V1\Task\TaskUpdateRequest;
 use App\Models\Task;
+use GrahamCampbell\ResultType\Success;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use App\Http\Requests\API\V1\Task\TaskStoreRequest;
@@ -21,7 +22,7 @@ class TaskController extends Controller
 
         $task = $query->latest('created_at')->paginate($perPage);
 
-        return response()->json($task);
+        return $this->success($task, 'Task Data');
 
     }
 
@@ -47,10 +48,7 @@ class TaskController extends Controller
                 'description' => $request->description,
                 'status' => $request->status ?? 'created'
             ]);
-            return response()->json([
-                'data' => $task,
-                'message' => 'Task Store Successfully'
-            ]);
+            return $this->success($task, 'Task store success');
         } catch (\Exception $exception) {
             Log::error('Task store Error : ' .$exception->getMessage());
         }
@@ -75,20 +73,28 @@ class TaskController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(TaskUpdateRequest $request, string $id)
+    public function update(TaskUpdateRequest $request, Task $task)
     {
         try {
-            //code...
+            $data = $request->validated();
+            $task->fill($data)->save();
+
+            return $this->success($task, 'Task updated');
         } catch (\Exception $exception) {
-            Log::error('Task store Error : ' .$exception->getMessage());
+            Log::error('Task update Error : ' .$exception->getMessage());
         }
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy(Task $task)
     {
-        //
+        try {
+            $task->delete();
+            return $this->success('', 'Task Deleted successfully');
+        } catch (\Exception $exception) {
+            Log::error('Task delete Error : ' .$exception->getMessage());
+        }
     }
 }

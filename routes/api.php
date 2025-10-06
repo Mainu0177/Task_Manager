@@ -2,6 +2,8 @@
 
 use App\Http\Controllers\API\V1\Auth\AuthController;
 use App\Http\Controllers\API\V1\Auth\ForgetPasswordController;
+use App\Http\Controllers\API\V1\GroupController;
+use App\Http\Controllers\API\V1\GroupUserController;
 use App\Http\Controllers\API\V1\UserController;
 use App\Http\Controllers\TaskController;
 use Illuminate\Support\Facades\Route;
@@ -24,10 +26,16 @@ Route::group(['prefix' => 'V1'], function () {
         });
 
         Route::group(['middleware' => 'auth:sanctum'], function () {
+                Route::apiResource('groups', GroupController::class);
+            });
+        Route::group(['middleware' => 'auth:sanctum'], function () {
                 Route::apiResource('tasks', TaskController::class);
             });
-    });
 
+        Route::group(['middleware' => 'auth:sanctum'], function () {
+            Route::post('group/{group}/members' , [GroupUserController::class, 'store']);
+        });
+    });
 });
 
 
