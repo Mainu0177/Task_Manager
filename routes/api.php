@@ -33,7 +33,9 @@ Route::group(['prefix' => 'V1'], function () {
             });
 
         Route::group(['middleware' => 'auth:sanctum'], function () {
-            Route::post('group/{group}/members' , [GroupUserController::class, 'store']);
+            Route::get('groups/{group}/users' , [GroupUserController::class, 'list']);
+            Route::post('groups/{group}/users' , [GroupUserController::class, 'store']);
+            Route::delete('groups/{group}/users/{user}' , [GroupUserController::class, 'destroy']);
         });
     });
 });

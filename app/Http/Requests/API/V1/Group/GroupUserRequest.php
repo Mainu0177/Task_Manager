@@ -23,9 +23,9 @@ class GroupUserRequest extends ApiFormRequest
     public function rules(): array
     {
         return [
-            'group_id' => 'nullable|integer|exists:users.id|required_without:user_ids',
+            'user_id' => 'nullable|integer|exists:users,id|required_without:user_ids',
             'user_ids' => 'nullable|array|required_without:user_id',
-            'user_ids.*' => 'integer|exists:users.id'
+            'user_ids.*' => 'integer|exists:users,id'
         ];
     }
 }
